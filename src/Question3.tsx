@@ -1,7 +1,5 @@
 // import StockTracker from "./StockTracker";
 
-import Button from "./components/Button";
-
 const Question3: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
@@ -45,11 +43,8 @@ const Question3: React.FC = () => {
 const StockTrackerPanel: React.FC = () => {
   return (
     <div className="gap-2">
-      <input
-        className="inline-block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 mr-2 w-32 p-2.5"
-        placeholder="Stock name"
-      />
-      <Button>Start Tracking</Button>
+      <input className="w-32" placeholder="Stock name" />
+      <button>Start Tracking</button>
     </div>
   );
 };
