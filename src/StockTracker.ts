@@ -1,5 +1,9 @@
 import { EventEmitter } from "events";
 
+type StockEvent = {
+  data: { name: string; price: string };
+};
+
 class StockTracker {
   private emitter = new EventEmitter();
   private intervalId = 0;
@@ -15,7 +19,10 @@ class StockTracker {
     }, 1500);
   }
 
-  public on(name: string, callback: any) {
+  public on<T extends keyof StockEvent>(
+    name: T,
+    callback: (data: StockEvent[T]) => void
+  ) {
     this.emitter.on(name, callback);
   }
 
