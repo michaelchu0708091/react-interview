@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 const Question2: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
@@ -43,8 +44,55 @@ const Question2: React.FC = () => {
 };
 
 /** You should start here */
+// Calc of skip = 20*currentPage
 const ProductInspector: React.FC = () => {
-  return <div className="text-gray-400">You should start here</div>;
+
+  const [filter, setFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const { isLoading, products } = useFetchProduct(filter, currentPage*20)
+
+
+  // useEffect(()=>{
+  //   useFetchProduct(filter);
+  // }, [filter]);
+  return (
+    <>
+    <button disabled={currentPage === 0} onClick={e=>setCurrentPage((prevState)=>prevState-1)}>Prev page</button>
+    <button onClick={e=>setCurrentPage((prevState)=>prevState+1)}>Next page</button>
+    <input type='text' onChange={e=>setFilter(e.target.value)} value={filter}></input>
+   { !isLoading && products.map(item => <div key={item.id}>{item.title}: {item.description}</div>)}
+   {isLoading && <div>isLoading....</div>}
+
+    </>
+
+  )
 };
 
 export default Question2;
+
+const fetchProductsList = async (query?, skip?) => {
+  const url = `https://dummyjson.com/products/search?limit=20&skip=${skip}&q=${query || ''}`
+  const _response = await fetch(url);
+  const list = await _response.json();
+  const response = list && list.products?.reduce((p, c) => [...p, { id: c.id, title: c.title, description: c.description }], []);
+  return response;
+}
+
+const useFetchProduct = (query?, skip?) => {
+  const [stateList, setStateList] = useState({
+    isLoading: true,
+    products: [],
+  });
+  const fetch = async (query) => {
+    setStateList({...stateList, isLoading: true});
+    const list = await fetchProductsList(query, skip);
+    list && setStateList({
+      isLoading: false,
+      products: list
+    })
+  }
+  useEffect(() => {
+    fetch(query, skip);
+  }, [query, skip])
+  return stateList;
+}

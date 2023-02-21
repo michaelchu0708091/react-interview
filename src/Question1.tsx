@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Simulate send order request
 const sendOrder = () => {
@@ -17,13 +17,16 @@ const Question1: React.FC = () => {
   const handleSendOrder = async () => {
     setSendCount(sendCount + 1);
 
-    sendOrder().then((result) => {
+    sendOrder().then(result =>{
       if (result) {
-        setSuccessOrderCount(successOrderCount + 1)
+        console.log(successOrderCount);
+        setSuccessOrderCount(prevState => prevState+1)
       } else {
-        setFailOrderCount(failOrderCount + 1)
+        console.log(failOrderCount);
+        setFailOrderCount(prevState => prevState+1)
       }
     });
+
   };
 
   const orderCount = successOrderCount + failOrderCount

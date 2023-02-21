@@ -1,4 +1,4 @@
-// import StockTracker from "./StockTracker";
+import StockTracker from "./StockTracker";
 
 const Question3: React.FC = () => {
   return (
@@ -41,8 +41,16 @@ const Question3: React.FC = () => {
 };
 
 const StockTrackerPanel: React.FC = () => {
+  
+  const newStockTracker = new StockTracker();
+  newStockTracker.on('data', (message)=>{
+    console.log(message)
+  });
   return (
     <div className="gap-2">
+      <button onClick={e=>newStockTracker.on('stop', ()=>{
+        console.log('I have been unsubscribed')
+      })}>Unsubscribe</button>
       <input className="w-32" placeholder="Stock name" />
       <button>Start Tracking</button>
     </div>
